@@ -21,14 +21,135 @@ This playbook has been run and tested using VSIs in a VPC Gen2 environment, depl
     - ansible-galaxy role install roles/requirements.yml -p roles
     - ansible-playbook kubectlplaybook.yml -i hosts
 
+## Running on IBM Cloud Schematics
 
-**Steps** : 
+IBM Cloud Schematics supports running Ansible playbooks natively. You can try the same example through various entry points. 
 
-1. Create an Action from schematics, Select playbook from this repository *kubectlplaybook.yml* in Settings page.
+### Running Actions using the IBM Cloud Schematics API
 
-2. Provide your Virtual machine details in IBMCloud Resource Inventory tab.
+1. Create a file containing the Schematics Action payload. The Action payload is a json object. Start with `{}` and add the required fields. 
 
-2. Click on Run Action which will download the role from ansible-galaxy and run ansible-playbook command to install the kubectl.
+    - Add basic information for action like `name`, `description`, the Schematics `location` you want the Action to be placed in, `resource_group` and tag for identification. Ensure that the Action `name` is unique.  
+
+    ```
+    "name": "Example-1",
+    "description": "This Action install Kubectl on VSI using ansible",
+    "location": "us-east",
+    "resource_group": "Default",
+    "tags": [
+      "string"
+    ]
+    ```
+
+    - Add the source repo for importing the Ansible playbooks. 
+    ```
+    "source_type": "GitHub", 
+    "source": {
+         "source_type" : "git",
+         "git" : {
+              "git_repo_url": "https://github.com/areddy548/kubectl-role"
+         }
+    }
+    ```
+    - Add the playbook which should run by default when `run` is triggered. Any playbook from the source repo can be selected. 
+    ```
+    "command_parameter": "kubectlplaybook.yml"
+    ```
+
+    - Add the Credentials required o run the configuration. For deploying code to VSI's these will be the SSH private keys for the bastion host and target VSIs. All credentials should be added as `name` and `value` and will be referred in the target section with the same name.
+    ```
+    "credentials": [
+      {
+        "name": "ssh_key",
+        "value": "< SSH_KEY >",
+        "metadata": {
+          "type": "string",
+          "default_value": "",
+          "secure": true
+        }
+      }
+    ]
+    ```
+    - Add Bastion host information. Refer to the credentials provided in the above step in `cred_ref`.
+    ```
+    "bastion_ref": {
+      "name": "bastionhost",
+      "type": "string",
+      "description": "string",
+      "resource_query": "< BASITION_HOST_IP_ADDRESS >",
+      "credential_ref": "ssh_key"
+    }
+    ```
+    - Add inventory information. Refer the credentials provided in above step in `cred_ref`. Multiple groups with multiple host can be provided.The following inventory file 
+    ```
+    [webserverhost]
+    FIRST_WEB_SERVER_IP_ADDRESS
+    SECOND_WEB_SERVER_IP_ADDRESS
+    ```
+    can be represented as 
+    ```
+    "targets_ref": [
+      {
+        "name": "webserverhost",
+        "description": "Group of webservers",
+        "credential_ref": "ssh_key",
+        "bastion_ref": "bastionhost",
+        "target_resources": [
+          {
+            "resource_id": "< FIRST_WEB_SERVER_IP_ADDRESS >"
+          },
+           {
+            "resource_id": "< SECOND_WEB_SERVER_IP_ADDRESS >"
+          }
+        ]
+      }
+    ]
+    ```
+
+2. Create action by making a http request.
+    - Headers: 
+    Authorization : < Bearer ...>
+    - Method: POST
+    - ENDPOINT: `https://schematics.cloud.ibm.com/v2/actions`
+
+
+3. Note the `ID` from step 1 and check the status of action by making http request. 
+    - Headers: 
+    Authorization : < Bearer ...>
+    - Method: GET
+    - ENDPOINT: `https://schematics.cloud.ibm.com/v2/actions/<ID>`
+
+4. Verify if the action is in `normal` state. 
+    ```
+    "state": {  
+        "status_code": "normal",
+        "status_message": "Action is normal and ready for execution"
+    }
+    ```
+5. Create Job with a http request. Modify the payload with the `ID` received in step 1. 
+    - Headers: 
+    Authorization : < Bearer ...>
+    - Method: GET
+    - ENDPOINT: `https://schematics.cloud.ibm.com/v2/jobs`
+
+    ```
+    {
+        "command_object": "action",
+        "command_object_id": "< ACTION_ID >",
+        "command_name": "ansible_playbook_run"
+    }
+    ```
+
+6. Check logs with a http request. Use the `ID` from step 4. 
+    - Headers: 
+    Authorization : < Bearer ...>
+    - Method: GET
+    - ENDPOINT: `https://schematics.cloud.ibm.com/v2/jobs/<JOB-ID>/logs`
+
+## Outputs
+
+Check the job logs for of TASK: `Display Index page content`. The content should give information about installation successful if everything completed successfully.
+
 
 **Results** : 
 
