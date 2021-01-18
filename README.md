@@ -11,7 +11,7 @@ This playbook has been run and tested using VSIs in a VPC Gen2 environment, depl
 ## Prerequisites :
 
    - Ansible 1.2.9
-   - Multitier VPC Bastion LAMP
+   - [Multitier VPC Bastion LAMP](https://github.com/Cloud-Schematics/multitier-bastion-vpc-lamp)
    - SSH Key on IBM Cloud
 
 
