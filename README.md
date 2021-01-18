@@ -172,4 +172,9 @@ Check the job logs for of TASK: `Display Index page content`. The content should
 
 **Results** : 
 
-Log into your VSI Instance and check whether Kubectl is installed or not.
+Log into your VSI Instance by ssh to VSI using bastion, below is the command
+```
+ssh -i <ssh_privatekey_path> -o ProxyCommand="ssh -i <ssh_privatekey_path> -W %h:%p root@<bastion_ip>" root@<vsi_ip>
+```
+
+Check whether Kubectl is got installed or not.
