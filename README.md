@@ -14,6 +14,13 @@ This playbook has been run and tested using VSIs in a VPC Gen2 environment, depl
    - [Multitier VPC Bastion LAMP](https://github.com/Cloud-Schematics/multitier-bastion-vpc-lamp)
    - SSH Key on IBM Cloud
 
+## Running the playbook locally
+ To run this example locally, create a hosts file in the root of the example folder and update it with the {target-host-ip}, {jump-server-ip} and respective ssh keys. Details of how to configure the host file manually can be found in the [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#inventory-basics-formats-hosts-and-groups). 
+ The kubectl can be installed using the following 
+- commands:
+    - ansible-galaxy role install roles/requirements.yml -p roles
+    - ansible-playbook kubectlplaybook.yml -i hosts
+
 
 **Steps** : 
 
@@ -23,6 +30,6 @@ This playbook has been run and tested using VSIs in a VPC Gen2 environment, depl
 
 2. Click on Run Action which will download the role from ansible-galaxy and run ansible-playbook command to install the kubectl.
 
-Results : 
+**Results** : 
 
 Log into your Virtual machine and check whether Kubectl is installed or not.
