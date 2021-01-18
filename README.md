@@ -168,7 +168,7 @@ Check the job logs for of TASK: `Display Index page content`. The content should
 
 4. Wait for Action to come into **Normal** state and click on **Run Action** Button to run the playbook
 
-5. Check the logs by clicking on **Jobs** in side menu. Currently running job will be on top of the list, Once job come to **Complated** state with out any error you can check results.
+5. Check the logs by clicking on **Jobs** in side menu. Currently running job will be on top of the list, Once job come to **Completed** state with out any error you can check results.
 
 **Results** : 
 
