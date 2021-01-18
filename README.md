@@ -150,7 +150,26 @@ IBM Cloud Schematics supports running Ansible playbooks natively. You can try th
 
 Check the job logs for of TASK: `Display Index page content`. The content should give information about installation successful if everything completed successfully.
 
+### Running Actions using the IBM Cloud Schematics UI
+
+1. Create an Action by Providing *name*, *description*, *location* and *resource_group* from IBM Cloud Schematics.
+
+2. Provide the Repo deatils in this case it is [repo](https://github.com/areddy548/kubectl-role), if it is Private repo provide github token also. Wait untill Action come to **Normal** state
+
+3. Enter the VSI and bastion host details in **IBM Cloud Resource Invetory** Tab.
+
+   ## Variables
+
+      | Variable Name | Description |	Default Value |
+      | ----- | ----- | ----- |
+      | Bastion host IP | bastion floating IP address | |
+      | IBM Cloud inventory IP addresses| VSI IP address | |
+      | IBM Cloud resource inventory SSH key| SSH Private key used for VSI installation | |
+
+4. Wait for Action to come into **Normal** and click on **Run Action** Button to run the playbook
+
+5. Check the Logs by clicking on **Jobs** in side menu. Running job will be on top of the List, once job come to Completed state with out any error you can check in VSI for result.
 
 **Results** : 
 
-Log into your Virtual machine and check whether Kubectl is installed or not.
+Log into your VSI Instance and check whether Kubectl is installed or not.
