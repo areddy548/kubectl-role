@@ -154,7 +154,7 @@ Check the job logs for of TASK: `Display Index page content`. The content should
 
 1. Create an Action by Providing *name*, *description*, *location* and *resource_group* from IBM Cloud Schematics.
 
-2. Provide the Repo deatils in this case it is [repo](https://github.com/areddy548/kubectl-role), if it is Private repo provide github token also. Wait untill Action come to **Normal** state
+2. Provide the Repo deatils in this case it is [repo](https://github.com/areddy548/kubectl-role) under **Ansible Playbook** Tab, if it is Private repo provide github token as **Personal access token**. Wait untill Action come to **Normal** state
 
 3. Enter the VSI and bastion host details in **IBM Cloud Resource Invetory** Tab.
 
@@ -166,7 +166,7 @@ Check the job logs for of TASK: `Display Index page content`. The content should
       | IBM Cloud inventory IP addresses| VSI IP address | |
       | IBM Cloud resource inventory SSH key| SSH Private key used for VSI installation | |
 
-4. Wait for Action to come into **Normal** and click on **Run Action** Button to run the playbook
+4. Wait for Action to come into **Normal** state and click on **Run Action** Button to run the playbook
 
 5. Check the logs by clicking on **Jobs** in side menu. Currently running job will be on top of the list, Once job come to **Complated** state with out any error you can check results.
 
